@@ -1,0 +1,65 @@
+﻿@model Restaurant_Web_App.Models.Food
+
+@{
+    ViewBag.Title = "Food";
+}
+
+<h4>Details for @Model.Name</h4>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NormalSizedPrice)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NormalSizedPrice)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SmallSizedPrice)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SmallSizedPrice)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FamilySizedPrice)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FamilySizedPrice)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ImageUrl)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ImageUrl)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

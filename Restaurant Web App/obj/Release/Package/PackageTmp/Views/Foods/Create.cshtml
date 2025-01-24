@@ -1,0 +1,179 @@
+﻿@model Restaurant_Web_App.Models.FoodModel
+
+@{
+    ViewBag.Title = "Food";
+}
+
+<h4>Add New Food to @Model.FoodCategoryName Category</h4>
+
+<style>
+    .grid-container {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr); /* 3 columns layout */
+        gap: 30px;
+        padding: 35px;
+        justify-items: center;
+    }
+
+    .grid-item {
+        background-color: white;
+        border: 2px solid rosybrown;
+        border-radius: 10px;
+        height: fit-content;
+        text-align:center;
+        padding: 25px;
+    }
+    .col-md-10{
+        width: 100%;
+    }
+    .form-group{
+        text-align: left;
+    }
+    @@media screen and (max-width: 768px) {
+        .grid-container {
+            grid-template-columns: 1fr; /* Stack sections vertically */
+        }
+    }
+    .form-group label {
+        display: inline;
+    }
+    .grid-item, .grid-item h4 {
+        color: saddlebrown;
+    }
+</style>
+
+@using (Html.BeginForm("Create", "Foods", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <hr />
+
+    <div class="form-horizontal grid-container">
+        <div class="grid-item">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="NormalSizedPrice" class="control-label col-md-2">Normal Sized Price</label>
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.NormalSizedPrice, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.NormalSizedPrice, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="SmallSizedPrice" class="control-label col-md-2">Small Sized Price</label>
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.SmallSizedPrice, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.SmallSizedPrice, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="FamilySizedPrice" class="control-label col-md-2">Family Sized Price</label>
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.FamilySizedPrice, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.FamilySizedPrice, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <br />
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <button type="button" class="btn btn-primary" onclick="disablePrices()">Disable Small and Family Sizes</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="imageFile" class="control-label col-md-2">Image</label>
+                <div class="col-md-10">
+                    @Html.TextBoxFor(m => m.imageFile, new { type = "file", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.imageFile, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="grid-item">
+            <h4>Select Ingredients</h4>
+            <hr />
+            @for (int i = 0; i < Model.Ingredients.Count; i++)
+            {
+                <div>
+                    <input type="checkbox" name="SelectedIngredients" value="@Model.Ingredients[i].Id" />
+                    @Html.Label(Model.Ingredients[i].Name)
+                </div>
+            }
+        </div>
+        <div class="grid-item">
+            <h4>Select NoIngredients</h4>
+            <hr />
+            @for (int i = 0; i < Model.NoIngredients.Count; i++)
+            {
+                <div>
+                    <input type="checkbox" name="SelectedNoIngredients" value="@Model.NoIngredients[i].Id" />
+                    @Html.Label(Model.NoIngredients[i].Name)
+                </div>
+            }
+        </div>
+        <div class="grid-item">
+            <h4>Select Options</h4>
+            <hr />
+            @for (int i = 0; i < Model.Options.Count; i++)
+            {
+                <div>
+                    <input type="checkbox" name="SelectedOptions" value="@Model.Options[i].Id" />
+                    @Html.Label(Model.Options[i].Name)
+                </div>
+            }
+        </div>
+        @Html.HiddenFor(m => m.FoodCategoryId)
+   
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-primary" /> &nbsp;
+                @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-secondary" })
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts{
+    <script>
+            function disablePrices() {
+                // Disable the Small Sized Price field and set its value to 0
+
+
+        var smallPriceField = document.getElementById('SmallSizedPrice');
+        smallPriceField.value = 0;
+        smallPriceField.disabled = !smallPriceField.disabled;
+
+        // Disable the Family Sized Price field and set its value to 0
+        var familyPriceField = document.getElementById('FamilySizedPrice');
+        familyPriceField.value = 0;
+        familyPriceField.disabled = !familyPriceField.disabled;
+    }
+    </script>
+
+    }
+
+<!--
+@@section Scripts {
+    @@Scripts.Render("~/bundles/jqueryval")
+    //
+<script>
+    // Disable client-side validation to test
+    //  $("form").removeData("validator");
+    //$("form").removeData("unobtrusiveValidation");
+    //$.validator.unobtrusive.parse("form");
+    // </script>
+}-->

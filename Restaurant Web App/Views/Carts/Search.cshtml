@@ -1,0 +1,157 @@
+﻿@model IEnumerable<Restaurant_Web_App.Models.Cart>
+
+@{
+    ViewBag.Title = "Orders";
+}
+
+<style>
+    .grid-container {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr); /* 3 columns layout */
+        gap: 10px;
+        padding: 35px;
+        justify-items: center;
+    }
+
+    .grid-item {
+        //text-align: center;
+        background-color: whitesmoke;
+        border-radius: 10px;
+        width: 230px;
+        height: fit-content;
+        padding: 10px;
+        word-wrap: break-word; /* Break long words and wrap text */
+        word-break: break-all; /* Break the text to avoid overflow (if needed) */
+        overflow-wrap: break-word;
+    }
+
+    .big-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr); /* 3 columns layout */
+        gap: 10px;
+        padding: 35px;
+        justify-items: center;
+    }
+
+    .big-item {
+        width: 230px;
+        height: fit-content;
+        padding: 10px;
+        word-wrap: break-word; /* Break long words and wrap text */
+        word-break: break-all; /* Break the text to avoid overflow (if needed) */
+        overflow-wrap: break-word;
+    }
+
+    .bottom {
+        background-color: rosybrown;
+        height: fit-content;
+        width: 200px;
+        padding: 10px;
+        margin: auto;
+    }
+
+    .button a {
+        text-decoration: none;
+        color: ghostwhite;
+    }
+
+    .grid-item img {
+        width: 85%;
+        height: 85%;
+        object-fit: cover;
+        margin: 5px 0;
+    }
+
+    ul {
+        text-align: left;
+    }
+
+
+
+
+    /* Responsive behavior for smaller screens */
+    @@media screen and (max-width: 768px) {
+        .grid-container {
+            grid-template-columns: 1fr; /* Stack sections vertically */
+        }
+
+        .big-container {
+            grid-template-columns: 1fr; /* Stack sections vertically */
+        }
+</style>
+
+<h4>Search</h4>
+<hr />
+
+<table>
+    @foreach (Restaurant_Web_App.Models.Cart Cart in Model)
+    {
+        <tr class="big-container">
+            <td style="background-color: whitesmoke; border-radius: 10px; padding: 10px; width: 100%;">
+                <b>Order ID:</b> @Cart.Id
+                <br />
+                <b>Client: </b>
+                @Cart.User.Name @Cart.User.Surname
+                <br />
+                <b>Email:</b> @Cart.User.Email
+                <br />
+                <b>Phone:</b> @Cart.User.PhoneNumber
+                <br />
+                <b>Address: </b> @Cart.User.Address, @Cart.User.City
+                <br />
+                <b>Total:</b> @Cart.TotalPrice FCH
+                <br />
+                <b>Ordered: </b>@Cart.OrderedTime.ToString()
+                @if (Cart.isPrepared)
+                {
+                    <br /><b>Prepared: </b>@Cart.PreparedTime.ToString();
+                }
+                <br />
+                <br />
+                <p>
+                    @if (!Cart.isPrepared)
+                    {
+                        @Html.ActionLink("Finish", "FinishOrder", new { id = Cart.Id }, new { @class = "btn btn-success" })
+                    }
+                    &nbsp;
+
+                    @Html.ActionLink("Delete", "Delete", new { id = Cart.Id }, new { @class = "btn btn-danger" })
+                </p>
+            </td>
+
+            <td class="grid-container big-item">
+
+                @foreach (Restaurant_Web_App.Models.FoodOrder FO in Cart.FoodOrders)
+                {
+                    <div class="grid-item">
+                        <b>@FO.Food.Name @FO.SelectedSize</b> <br />
+                        <b>Quantity: @FO.Number</b> <br />
+                        <ul>
+                            @foreach (Restaurant_Web_App.Models.Ingredient ing in FO.SelectedIngredientsList)
+                            {
+                                <li>@ing.Name</li>
+                            }
+                            @foreach (Restaurant_Web_App.Models.NoIngredient ing in FO.SelectedNoIngredientsList)
+                            {
+                                <li>@ing.Name</li>
+                            }
+                            @foreach (Restaurant_Web_App.Models.Option ing in FO.SelectedOptionsList)
+                            {
+                                <li>@ing.Name</li>
+                            }
+                        </ul>
+                    </div>
+
+                }
+
+            </td>
+        </tr>
+
+
+    }
+
+
+</table>
+
+
+

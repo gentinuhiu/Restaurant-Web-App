@@ -1,0 +1,64 @@
+﻿@model IEnumerable<Restaurant_Web_App.Models.Food>
+
+@{
+    ViewBag.Title = "Foods";
+}
+
+<h4>Foods</h4>
+
+@if (User.Identity.IsAuthenticated && User.IsInRole("Administrator"))
+{
+
+    @Html.ActionLink("Add New Food", "CreateIndex", null, new { @class = "btn btn-primary" })
+
+}
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            Image
+        </th>
+        <th>
+            Category
+        </th>
+        <th>
+            Price (FCH)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                <img src="@Url.Content(item.ImageUrl)" style="width:50px;"/>
+            </td>
+            <td>
+                @if(item.FoodCategory != null)
+                {
+                    @item.FoodCategory.Name
+                }
+            </td>
+            <td>
+                @item.NormalSizedPrice/@item.SmallSizedPrice/@item.FamilySizedPrice
+            </td>
+            <td>
+                <div>
+                    @Html.ActionLink("Edit Info", "Edit", new { id = item.Id }, new { @class = "btn btn-primary" }) &nbsp;
+                    @Html.ActionLink("Edit Ingredients", "EditIngredients", new { id = item.Id }, new { @class = "btn btn-primary" }) &nbsp;
+                    @Html.ActionLink("Edit No Ingredients", "EditNoIngredients", new { id = item.Id }, new { @class = "btn btn-primary" }) &nbsp;
+                    @Html.ActionLink("Edit Options", "EditOptions", new { id = item.Id }, new { @class = "btn btn-primary" }) &nbsp;
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-danger" })
+                </div>
+            </td>
+        </tr>
+    }
+
+</table>
+

@@ -1,0 +1,116 @@
+﻿@model Restaurant_Web_App.Models.RegisterViewModel
+@{
+    ViewBag.Title = "Register";
+}
+<style>
+    .grid-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr); /* 3 columns layout */
+        gap: 30px;
+        padding: 35px;
+        background-color: #f9f9f9e0;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .grid-item {
+        height: fit-content;
+        padding: 10px;
+    }
+    label{
+        width: 100% !important;
+    }
+    .grid-container{
+        padding: 25px;
+        width: 75%;
+        margin: auto;
+        justify-items: center;
+    }
+    @@media screen and (max-width: 768px) {
+        .grid-container {
+            grid-template-columns: 1fr; /* Stack sections vertically */
+        }
+    }
+    body {
+        background: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)), url('/UploadedDocuments/background2.jpg') center;
+    }
+</style>
+
+<main aria-labelledby="title">
+    <h4 style="color: black; background-color: #f1f1f1e0; border-radius: 10px; padding: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); ">Create a new account</h4>
+    <br />
+
+    @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="grid-container">
+            <div class="grid-item">
+                <div class="row">
+                    @Html.ValidationSummary("", new { @class = "text-danger" })
+                    @Html.LabelFor(m => m.Name, new { @class = "col-md-2 col-form-label" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="row">
+                    @Html.LabelFor(m => m.Surname, new { @class = "col-md-2 col-form-label" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(m => m.Surname, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="row">
+                    @Html.LabelFor(m => m.Address, new { @class = "col-md-2 col-form-label" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(m => m.Address, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="row">
+                    @Html.LabelFor(m => m.City, new { @class = "col-md-2 col-form-label" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(m => m.City, new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="grid-item">
+                <div class="row">
+                    @Html.LabelFor(m => m.PhoneNumber, new { @class = "col-md-2 col-form-label" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="row">
+                    @Html.LabelFor(m => m.Email, new { @class = "col-md-2 col-form-label" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="row">
+                    @Html.LabelFor(m => m.Password, new { @class = "col-md-2 col-form-label" })
+                    <div class="col-md-10">
+                        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="row">
+                    @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 col-form-label" })
+                    <div class="col-md-10">
+                        @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="offset-md-2 col-md-10" style="text-align:center;">
+                <input type="submit" value="Register" class="btn btn-dark" />
+            </div>
+        </div>
+    }
+</main>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

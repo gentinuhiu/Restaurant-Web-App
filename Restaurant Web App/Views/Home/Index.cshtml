@@ -1,0 +1,881 @@
+﻿@using Newtonsoft.Json
+
+<main>
+    <style>
+        .main {
+            display: grid;
+            grid-template-columns: 3fr 1fr; /* Main grid layout with two columns */
+            grid-gap: 20px; /* Space between the grid-container and news */
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 3 columns layout */
+            gap: 30px;
+            padding: 35px;
+            background-color: #f1f1f1ba;
+            border-radius: 10px;
+            //background-color: rosybrown;
+        }
+
+        .grid-item {
+            text-align: center;
+            padding-top: 6px;
+            height: fit-content;
+            background-color: #8cce46cc;
+            border-radius: 10px;
+        }
+
+            .grid-item:hover {
+                background-color: lightgray;
+            }
+
+            .grid-item img {
+                width: 100%;
+                object-fit: cover;
+                border-radius: 10px;
+            }
+
+        #news {
+            /*
+                            background-color: #f1f1f1;
+            border-radius: 10px;
+            height: fit-content;
+            */
+        }
+
+        #news-inside, #reviews {
+            background-color: #f1f1f1e0;
+            border-radius: 10px;
+            height: fit-content;
+        }
+        /* Responsive behavior for smaller screens */
+        @@media screen and (max-width: 768px) {
+            .main {
+                grid-template-columns: 1fr; /* Stack the two sections vertically */
+            }
+
+            .grid-container {
+                grid-template-columns: 1fr;
+            }
+
+            #news {
+                margin-top: 20px; /* Add space between the stacked items */
+            }
+        }
+
+        .grid-container a,
+        .grid-container p,
+        .grid-container b,
+        .grid-container i,
+        .grid-container h4 {
+            color: ghostwhite;
+        }
+
+        .grid-container a {
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: lightgray;
+        }
+
+        #news > div {
+            //padding: 20px;
+        }
+        /******************/
+
+        .week-carousel {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 15px;
+            position: relative;
+            //width: 100%;
+            width:60%;
+            padding: 10px 0;
+            background-color: #f1f1f1ba;
+            border-radius: 10px;
+        }
+
+        @@media screen and (max-width: 768px){
+            .week-carousel{
+                width:100%;
+            }
+        }
+
+        .week-slider-wrapper {
+            width: 80%; /* Adjust width as needed */
+            overflow: hidden;
+            display: flex;
+        }
+
+        .week-slider {
+            display: flex;
+            transition: transform 0.3s ease-in-out;
+            min-width: 100%;
+        }
+
+        .day-box {
+            flex: 1 0 100%; /* Full width on small screens */
+            //height: 100px;
+            margin: 0 10px;
+            display: flex;
+            justify-content: center;
+            //align-items: center;
+            //background-color: lightgray;
+            background-color: white;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-align: center;
+            //border-radius: 8px;
+            transition: background-color 0.3s ease;
+            white-space: nowrap;
+            height: fit-content;
+        }
+
+            /* Highlight the current day */
+            .day-box.current-day {
+                background-color: #8cce46cc;
+                color: white;
+            }
+
+        /* Navigation button styling */
+        .nav-btn {
+            background-color: transparent;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 10px;
+        }
+
+        .left-btn {
+            left: 0;
+        }
+
+        .right-btn {
+            right: 0;
+        }
+
+        /* Responsive behavior */
+        @@media (min-width: 600px) {
+            .day-box {
+                flex: 0 0 calc(33.33% - 20px); /* Show 3 boxes per row with 20px total gap */
+                margin: 0 10px;
+            }
+        }
+
+        @@media (min-width: 900px) {
+            .day-box {
+                flex: 0 0 calc(25% - 20px); /* Show 4 boxes per row with 20px total gap */
+                margin: 0 10px;
+            }
+        }
+        /*
+                .day-inside {
+                    width: 100%;
+                    height: 100%;
+                    margin: 15px;
+                    background-color: lightgray;
+                    border-radius: 10px;
+                    justify-content: center;
+                    align-items: center;
+                    text-align: center;
+
+            .day-box.current-day .day-inside{
+            background-color: rosybrown;
+            color: white;
+        }
+                }*/
+        .schedule {
+            font-weight: 100;
+            font-style: italic;
+            margin-top: 8px;
+        }
+
+        .day-inside a {
+            margin-bottom: 8px;
+        }
+
+        .line {
+            width: 100%;
+        }
+
+            .line p {
+                text-align: center;
+                padding: 5px 10px;
+                border-radius: 10px;
+                color: white;
+                margin-bottom: 3px;
+            }
+
+        .location {
+            background-color: #f1f1f1e0;
+            width: 100%;
+            height: fit-content;
+            border-radius: 10px;
+            margin-top: 8px;
+            margin-bottom: 8px;
+            padding: 15px;
+        }
+
+
+        .locations {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+            .locations > div p {
+                word-wrap: break-word; /* Break long words and wrap text */
+                word-break: break-all; /* Break the text to avoid overflow (if needed) */
+                overflow-wrap: break-word;
+            }
+
+            .locations p {
+                margin: 1px;
+                font-size: 15px;
+                display: block;
+            }
+
+                .locations p i {
+                    font-size: 13px;
+                }
+
+            .locations span {
+                text-decoration: underline;
+            }
+
+        #banner {
+            display: flex;
+            flex-wrap: wrap;
+            //flex-flow:column;
+        }
+
+            #banner > div {
+                flex: 1;
+                margin: 10px;
+            }
+
+        @@media (max-width: 768px) {
+            #banner {
+                flex: 100%; /* This makes each box take full width on small screens */
+                justify-content: center;
+            }
+        }
+
+        #buttons {
+            display: grid;
+            grid-template-columns: auto auto;
+            justify-content: center;
+        }
+
+            #buttons button {
+                padding: 10px 20px;
+                margin: 10px;
+                font-size: 16px;
+                cursor: pointer;
+                width: 150px;
+            }
+
+                #buttons button:disabled {
+                    background-color: grey;
+                    cursor: not-allowed;
+                }
+
+        .star {
+            font-size: 1.4rem;
+            color: #d3d3d3; /* Default star color (unselected) */
+        }
+
+            .star.selected {
+                color: gold; /* Selected star color */
+            }
+
+        .reviewBlock .nameSurname {
+            text-align: left;
+            font-weight: bold;
+            margin: 0;
+            bottom: -7px;
+            display: block;
+        }
+
+        .reviewBlock .reviewComment {
+            text-align: left;
+            margin: 0 0 4px 0;
+            display: block;
+            width: fit-content;
+            position: relative;
+            top: -9px;
+            white-space: normal; /* Allows the text to wrap to the next line */
+            overflow: hidden; /* Ensures that overflowing text is hidden */
+            text-overflow: ellipsis; /* Adds ellipsis (...) to clipped text */
+            display: -webkit-box; /* Required for limiting text lines */
+            -webkit-line-clamp: 2; /* Show up to 2 lines (adjust as needed) */
+            -webkit-box-orient: vertical; /* Required for line clamp */
+            max-width: 100%; /* Ensures content stays within the width of the container */
+            word-wrap: break-word;
+        }
+
+        .stars {
+            position: relative;
+            top: -10px;
+            float: left;
+        }
+
+
+
+        #emailFormUnique {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.7);
+            display: grid;
+            height: 450px;
+            justify-content: center;
+        }
+
+            /* Form group: spacing between fields */
+            #emailFormUnique .form-group {
+                margin-bottom: 20px;
+            }
+
+            /* Labels */
+            #emailFormUnique label {
+                display: block;
+                margin-bottom: 5px;
+                font-weight: 600;
+                font-size: 14px;
+                color: #333;
+            }
+
+        /* Input fields (title and body) */
+        #emailTitle,
+        #emailUser,
+        #emailBody {
+            width: 100%;
+            padding: 9px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            font-size: 16px;
+            color: #333;
+            background-color: #fff;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: border-color 0.3s ease-in-out;
+            width: 245px;
+        }
+
+            /* On focus of input/textarea */
+            #emailTitle:focus,
+            #emailUser:focus,
+            #emailBody:focus {
+                border-color: #007bff; /* Change the color on focus */
+                outline: none;
+            }
+        /* Textarea customization */
+        #emailBody {
+            resize: vertical;
+            min-height: 150px;
+        }
+
+        /* Submit button */
+        #emailSubmitButton {
+            display: inline-block;
+            height: fit-content;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: 600;
+            text-transform: uppercase;
+            //color: #fff;
+            //background-color: #007bff; /* Button background color */
+            //border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+            /* Button hover effect */
+            #emailSubmitButton:hover {
+                //background-color: #0056b3;
+            }
+
+            /* Button active state */
+            #emailSubmitButton:active {
+                //background-color: #004085;
+            }
+
+        /* Alert message styles */
+        .alert {
+            padding: 10px;
+            margin-top: 20px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        #last {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+            margin-top: 20px;
+            background-color: #fbfbfbba;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        @@media screen and (max-width: 768px) {
+            #last {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Responsive adjustments */
+        @@media (max-width: 768px) {
+            #emailFormUnique {
+                padding: 15px;
+            }
+        }
+
+        .location, .week-carousel, #news-inside, #reviews, .grid-container, .grid-item, iframe, #last {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.7);
+        }
+        .links a {
+            text-decoration: none;
+            padding: 6px;
+            background-color: red;
+            border-radius: 5px;
+            margin-block:10px;
+        }
+        .links i{
+            color:white;
+            height:35px;
+            width:35px;
+            text-align:center;
+        }
+        .links > .icon {
+            margin-right: 5px; /* Spacing between icon and text */
+            color: white; /* Change icon color if needed */
+
+        }
+
+        .links {
+            margin: 5px; /* Margin around the links */
+            position:fixed;
+            right:0;
+            top:450px;
+
+        }
+        .week-carousel .day-inside p{
+            margin:0;
+        }
+            .week-carousel .day-inside p:last-child{
+                margin-bottom:10px;
+            }
+            body {
+                background: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)), url('/UploadedDocuments/background2.jpg') center;
+            }
+    </style>
+    @{
+        ViewBag.Title = "Home";
+    }
+    <div class="line" id="top" style="height: 185px;width:370px;margin: auto;text-align:center;">
+        <p id="title" style="font-weight: 550;"></p>
+    </div>
+
+    <div id="buttons">
+        <a href="tel:001234567890">
+            <button id="callButton" class="btn btn-success" style="border: 0px solid black; background-color: #8cce46; ">Call</button>
+        </a>
+
+        <a href="#emailFormUnique">
+            <button id="emailButton" class="btn btn-success" style="border: 0px solid black; background-color: #8cce46; ">Send Email</button>
+        </a>
+    </div>
+
+    <div id="banner">
+
+        @if (User.Identity.IsAuthenticated && User.IsInRole("Administrator"))
+        {
+            <div class="week-carousel">
+                <button class="nav-btn left-btn">&#8249;</button> <!-- Left button -->
+
+                <div class="week-slider-wrapper">
+                    <div class="week-slider">
+                        <div class="day-box" data-day="0"><div class="day-inside">Sunday <p class="schedule">@Model.Days[0].GetSchedule()</p><p class="schedule">@Model.Days[0].GetSchedule2()</p>@Html.ActionLink("Edit", "Edit", "Days", new { id = Model.Days[0].Id }, new { @class = "btn btn-primary" })</div></div>
+                        <div class="day-box" data-day="1"><div class="day-inside">Monday <p class="schedule">@Model.Days[1].GetSchedule()</p><p class="schedule">@Model.Days[1].GetSchedule2()</p>@Html.ActionLink("Edit", "Edit", "Days", new { id = Model.Days[1].Id }, new { @class = "btn btn-primary" })</div></div>
+                        <div class="day-box" data-day="2"><div class="day-inside">Tuesday <p class="schedule">@Model.Days[2].GetSchedule()</p><p class="schedule">@Model.Days[2].GetSchedule2()</p>@Html.ActionLink("Edit", "Edit", "Days", new { id = Model.Days[2].Id }, new { @class = "btn btn-primary" })</div></div>
+                        <div class="day-box" data-day="3"><div class="day-inside">Wednesday <p class="schedule">@Model.Days[3].GetSchedule()</p><p class="schedule">@Model.Days[3].GetSchedule2()</p>@Html.ActionLink("Edit", "Edit", "Days", new { id = Model.Days[3].Id }, new { @class = "btn btn-primary" })</div></div>
+                        <div class="day-box" data-day="4"><div class="day-inside">Thursday <p class="schedule">@Model.Days[4].GetSchedule()</p><p class="schedule">@Model.Days[4].GetSchedule2()</p>@Html.ActionLink("Edit", "Edit", "Days", new { id = Model.Days[4].Id }, new { @class = "btn btn-primary" })</div></div>
+                        <div class="day-box" data-day="5"><div class="day-inside">Friday <p class="schedule">@Model.Days[5].GetSchedule()</p><p class="schedule">@Model.Days[5].GetSchedule2()</p>@Html.ActionLink("Edit", "Edit", "Days", new { id = Model.Days[5].Id }, new { @class = "btn btn-primary" })</div></div>
+                        <div class="day-box" data-day="6"><div class="day-inside">Saturday <p class="schedule">@Model.Days[6].GetSchedule()</p><p class="schedule">@Model.Days[6].GetSchedule2()</p>@Html.ActionLink("Edit", "Edit", "Days", new { id = Model.Days[6].Id }, new { @class = "btn btn-primary" })</div></div>
+                    </div>
+                </div>
+
+                <button class="nav-btn right-btn">&#8250;</button> <!-- Right button -->
+            </div>
+            <div class="location">
+
+                @Html.ActionLink("Edit", "Index", "Locations", null, new { @class = "btn btn-primary", style = "margin:5px;" })
+
+                <p style="font-style:italic">Delivery Locations</p>
+
+                <div class="locations">
+                    @foreach (Restaurant_Web_App.Models.Location Loc in Model.Locations)
+                    {
+                        <p><span>@Loc.LocationName-<i>@Loc.Time'</i></span></p>
+                    }
+                </div>
+            </div>
+
+        }
+        else
+        {
+            <div class="week-carousel">
+                <button class="nav-btn left-btn">&#8249;</button> <!-- Left button -->
+
+                <div class="week-slider-wrapper">
+                    <div class="week-slider">
+                        <div class="day-box" data-day="0"><div class="day-inside">Sunday <p class="schedule">@Model.Days[0].GetSchedule()</p><p class="schedule">@Model.Days[0].GetSchedule2()</p></div></div>
+                        <div class="day-box" data-day="1"><div class="day-inside">Monday <p class="schedule">@Model.Days[1].GetSchedule()</p><p class="schedule">@Model.Days[1].GetSchedule2()</p></div></div>
+                        <div class="day-box" data-day="2"><div class="day-inside">Tuesday <p class="schedule">@Model.Days[2].GetSchedule()</p><p class="schedule">@Model.Days[2].GetSchedule2()</p></div></div>
+                        <div class="day-box" data-day="3"><div class="day-inside">Wednesday <p class="schedule">@Model.Days[3].GetSchedule()</p><p class="schedule">@Model.Days[3].GetSchedule2()</p></div></div>
+                        <div class="day-box" data-day="4"><div class="day-inside">Thursday <p class="schedule">@Model.Days[4].GetSchedule()</p><p class="schedule">@Model.Days[4].GetSchedule2()</p></div></div>
+                        <div class="day-box" data-day="5"><div class="day-inside">Friday <p class="schedule">@Model.Days[5].GetSchedule()</p><p class="schedule">@Model.Days[5].GetSchedule2()</p></div></div>
+                        <div class="day-box" data-day="6"><div class="day-inside">Saturday <p class="schedule">@Model.Days[6].GetSchedule()</p><p class="schedule">@Model.Days[6].GetSchedule2()</p></div></div>
+                    </div>
+                </div>
+
+                <button class="nav-btn right-btn">&#8250;</button> <!-- Right button -->
+            </div>
+            <div class="location">
+                <p style="font-style:italic">Delivery Locations</p>
+
+                <div class="locations">
+                    @foreach (Restaurant_Web_App.Models.Location Loc in Model.Locations)
+                    {
+                        <p><span>@Loc.LocationName-<i>@Loc.Time'</i></span></p>
+                    }
+                </div>
+            </div>
+
+        }
+
+    </div>
+
+
+
+    @if (User.Identity.IsAuthenticated && User.IsInRole("Administrator"))
+    {
+        <p class="button">
+            @Html.ActionLink("Add New Food Category", "Create", "FoodCategories", null, new { @class = "btn btn-primary" })
+        </p>
+    }
+
+
+
+<div class="links">
+    @if (User.Identity.IsAuthenticated)
+    {
+        <!-- Cart link -->
+        <a href="Carts/ClientIndex">
+            <i class="fas fa-shopping-cart icon"></i>
+        </a>
+        <br />
+    }
+        <!-- Arrow link -->
+        <a href="#top">
+            <i class="fas fa-arrow-up icon"></i>
+        </a>
+    </div>
+    
+    <div class="main">
+        <div class="grid-container">
+
+            @foreach (Restaurant_Web_App.Models.FoodCategory FoodCategory in Model.FoodCategories)
+            {
+                <div class="grid-item">
+                    <a href="FoodCategories/Details/@FoodCategory.Id">
+                        <h4>@FoodCategory.Name</h4>
+                        <img src="@Url.Content(FoodCategory.imageUrl)" alt="Image of @FoodCategory.Name">
+                        @if (User.Identity.IsAuthenticated && User.IsInRole("Administrator"))
+                        {
+                            <div>
+                                @Html.ActionLink("Edit", "Edit", "FoodCategories", new { id = FoodCategory.Id }, null) <br />
+                                @Html.ActionLink("Delete", "Delete", "FoodCategories", new { id = FoodCategory.Id }, null)
+                            </div>
+                        }
+                    </a>
+                </div>
+            }
+        </div>
+
+        <div id="news">
+            <div id="news-inside">
+                <i><b style="color:saddlebrown;width:100%;padding:6px 0;display:block;text-align:center;">News</b></i>
+                <hr style="margin:0;" />
+                @if (User.Identity.IsAuthenticated && User.IsInRole("Administrator"))
+                {
+
+                    @Html.ActionLink("Add New", "Create", "News", null, new { @class = "btn btn-primary", style = "margin:10px;" });
+                }
+                <div style="text-align:center;width:80%;margin:auto;">
+
+                    @if (Model.News.Count == 0)
+                    {
+                        <p style="margin-bottom:7px;"><i style="text-align: center;">News will be shown in this banner.</i></p>
+                    }
+
+                    @for (int i = 0; i < Model.News.Count; i++)
+                    {
+                        Restaurant_Web_App.Models.New New = Model.News[i];
+                        <div style="padding: 15px 0;">
+                            <p style="text-align:left;margin-bottom: 0px; font-weight:600;">@New.Text</p>
+                            <i>Date: @New.TimePosted.ToString()</i>
+                        </div>
+                        <p class="newsButtons" style="margin:0;">
+                            @if (User.Identity.IsAuthenticated && User.IsInRole("Administrator"))
+                            {
+                                <div style="margin: 10px;">
+                                    @Html.ActionLink("Delete", "Delete", "News", new { id = New.Id }, new { @class = "btn btn-danger" })
+                                    @Html.ActionLink("Edit", "Edit", "News", new { id = New.Id }, new { @class = "btn btn-primary" })
+                                </div>
+                            }
+                        </p>
+                        if (i < Model.News.Count - 1)
+                        {
+                            <hr style="margin: 0;" />
+                        }
+                    }
+                </div>
+            </div>
+            <div id="reviews" style="margin-top:12px;">
+                <i><b style="color:saddlebrown;width:100%;padding:6px 0;display:block;text-align:center;">Reviews</b></i>
+                <hr style="margin:0;" />
+
+                <div style="text-align:center;width:80%;margin:auto;">
+
+                    @if (Model.Reviews.Count == 0)
+                    {
+                        <p style="margin-bottom:7px;"><i style="text-align: center;">Reviews will be shown in this banner.</i></p>
+
+                    }
+                    else
+                    {
+                        for (int i = 0; i < Model.Reviews.Count; i++)
+                        {
+
+                            <div class="reviewBlock">
+                                <p style="margin:4px 0 0 0;">
+                                    @{
+                                        Restaurant_Web_App.Models.Review Review = Model.Reviews[i];
+                                    }
+                                    <span class="nameSurname">@Review.User.Name @Review.User.Surname </span>
+
+
+
+                                    <span class="stars">
+                                        @for (int j = 0; j < Review.Rating; j++)
+                                        {
+                                            <span class="star selected">&#9733;</span>
+                                        }
+                                        @for (int k = 0; k < 5 - Review.Rating; k++)
+                                        {
+                                            <span class="star">&#9733;</span>
+                                        }
+                                    </span>
+                                </p>
+                                <br />
+                                <p class="reviewComment" style="float:left;">
+                                    @if (Review.Comment.Length > 80)
+                                    {
+                                        @Review.Comment.Substring(0, 80) @:...
+                                    }
+                                    else
+                                    {
+                                        @Review.Comment
+                                    }
+                                </p>
+                            </div>
+                            if (i < 7 && i < Model.Reviews.Count - 1)
+                            {
+                                <hr style="margin:0;display:block;width:100%;" />
+                            }
+                            if (i == 7)
+                            {
+                                break;
+                            }
+                        }
+                    }
+                </div>
+
+                <hr style="margin: 0;display:block;width:100%;" />
+                @Html.ActionLink("Read More", "Index", "Reviews", null, new { @style = "display:block;width:fit-content;margin: 5px auto 9px auto;text-decoration:none;" })
+
+
+
+            </div>
+        </div>
+
+
+    </div>
+
+
+
+
+    <div id="last">
+        <div id="form">
+
+            <p style="font-style:italic;text-align:center;font-size:16px;">Send an Email</p>
+            <form id="emailFormUnique" action="https://formspree.io/f/xnnqqwoj" method="POST">
+
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <div class="form-group">
+                        <label for="emailUser">Sender</label>
+                        <input type="text" id="emailUser" name="emailUser" class="form-control" value="@Model.User.Email" enabled="false" required disabled />
+                    </div>
+                }
+                else
+                {
+                    <div class="form-group">
+                        <label for="emailUser">Sender</label>
+                        <input type="text" id="emailUser" name="emailUser" class="form-control" value="Unknown" enabled="false" required disabled />
+                    </div>
+                }
+
+                <div class="form-group">
+                    <label for="emailTitle">Email Title</label>
+                    <input type="text" id="emailTitle" name="emailTitle" class="form-control" placeholder="Enter email title" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="emailBody">Email Body</label>
+                    <textarea id="emailBody" name="emailBody" class="form-control" rows="5" placeholder="Enter email body" required></textarea>
+                </div>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <button type="submit" id="emailSubmitButton" class="btn btn-success">Send Email</button>
+                }
+                else
+                {
+
+                    @Html.ActionLink("Login to send an Email", "Login", "Account", null, new { @class = "btn btn-dark", @style = "height:fit-content;" });
+                }
+            </form>
+        </div>
+        <div id="location">
+            <p style="font-style:italic;text-align:center;font-size:16px;">Location</p>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2722.683223815549!2d9.560930951301465!3d46.96791363976888!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4784c9f67f4ebaf3%3A0x7a646ef4659d0c1f!2sSubito+Pizzakurier+GmbH!5e0!3m2!1sde!2sch!4v1542879081138" width="100%" height="450" frameborder="0" style="border:0;border-radius: 10px;"></iframe>
+        </div>
+    </div>
+
+</main>
+<script>
+    const today = new Date().getDay(); // Get the current day (0 = Sunday, 1 = Monday, etc.)
+    const daysArray = @Html.Raw(JsonConvert.SerializeObject(Model.Days));
+    const currentDay = daysArray[today];
+
+    var startTimeHours = currentDay.StartTime[0] + currentDay.StartTime[1];
+    const startTimeMinutes = currentDay.StartTime[3] + currentDay.StartTime[4];
+
+    var endTimeHours = currentDay.EndTime[0] + currentDay.EndTime[1];
+    const endTimeMinutes = currentDay.EndTime[3] + currentDay.EndTime[4];
+
+    if (parseInt(endTimeHours) == 0) {
+        endTimeHours = "24";
+    }
+
+    const startTimeCount = (parseInt(startTimeHours) * 60) + parseInt(startTimeMinutes);
+    const endTimeCount = (parseInt(endTimeHours) * 60) + parseInt(endTimeMinutes);
+
+
+    const currentDate = new Date();
+    const currentHour = currentDate.getHours();
+    const currentMinutes = currentDate.getMinutes();
+    const currentCount = (currentHour * 60) + currentMinutes;
+
+    var startTimeHours2 = currentDay.StartTime2[0] + currentDay.StartTime2[1];
+    const startTimeMinutes2 = currentDay.StartTime2[3] + currentDay.StartTime2[4];
+
+    var endTimeHours2 = currentDay.EndTime2[0] + currentDay.EndTime2[1];
+    const endTimeMinutes2 = currentDay.EndTime2[3] + currentDay.EndTime2[4];
+
+    if (parseInt(endTimeHours2) == 0) {
+        endTimeHours2 = "24";
+    }
+
+    const startTimeCount2 = (parseInt(startTimeHours2) * 60) + parseInt(startTimeMinutes2);
+    const endTimeCount2 = (parseInt(endTimeHours2) * 60) + parseInt(endTimeMinutes2);
+
+    var line = document.getElementsByClassName("line")[0];
+    var emailButton = document.getElementById("emailButton");
+    var callButton = document.getElementById("callButton");
+
+    if ((currentCount >= startTimeCount && currentCount <= endTimeCount) || (currentCount >= startTimeCount2 && currentCount <= endTimeCount2)) {
+        line.style.background = "url('/UploadedDocuments/open.png') no-repeat center center";
+        line.style.backgroundSize = "cover";
+
+        emailButton.disabled = false;
+        callButton.disabled = false;
+    }
+    else {
+        line.style.background = "url('/UploadedDocuments/closed.png') no-repeat center center";
+        line.style.backgroundSize = "cover";
+
+        emailButton.disabled = true;
+        callButton.disabled = true;
+    }
+
+    /*****/
+
+
+    function toggleButtons() {
+        var isDisabled = document.getElementById('disableButtons').checked;
+        document.getElementById('callButton').disabled = isDisabled;
+        document.getElementById('emailButton').disabled = isDisabled;
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const today = new Date().getDay(); // Get the current day (0 = Sunday, 1 = Monday, etc.)
+        const weekSlider = document.querySelector('.week-slider');
+        const dayBoxes = document.querySelectorAll('.day-box');
+        const boxWidth = dayBoxes[0].offsetWidth + 20; // Adjust based on padding/margin
+
+        // Mark the current day
+        dayBoxes[today].classList.add('current-day');
+
+        // Sliding functionality with buttons
+        let currentSlide = today;
+
+        document.querySelector('.right-btn').addEventListener('click', () => {
+            if (currentSlide < 6) {
+                currentSlide++;
+                weekSlider.style.transform = `translateX(-${(currentSlide * boxWidth) + 11}px)`;
+            }
+        });
+
+        document.querySelector('.left-btn').addEventListener('click', () => {
+            if (currentSlide > 0) {
+                currentSlide--;
+                weekSlider.style.transform = `translateX(-${(currentSlide * boxWidth) + 11}px)`;
+            }
+        });
+
+        // Center the current day on page load
+        weekSlider.style.transform = `translateX(-${(today * boxWidth) + 11}px)`;
+    });
+
+</script>

@@ -1,0 +1,18 @@
+﻿namespace Restaurant_Web_App.Migrations
+{
+    using System;
+    using System.Data.Entity.Migrations;
+    
+    public partial class totalpricecart : DbMigration
+    {
+        public override void Up()
+        {
+            AddColumn("dbo.Carts", "TotalPrice", c => c.Decimal(nullable: false, precision: 18, scale: 2));
+        }
+        
+        public override void Down()
+        {
+            DropColumn("dbo.Carts", "TotalPrice");
+        }
+    }
+}

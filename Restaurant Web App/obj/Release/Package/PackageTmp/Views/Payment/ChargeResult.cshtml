@@ -1,0 +1,34 @@
+﻿@model Restaurant_Web_App.Models.Cart
+@{
+    ViewBag.Title = "Charge Result";
+}
+
+<style>
+    #result {
+        width: fit-content;
+        margin: 100px auto;
+        background-color: forestgreen;
+        border-radius: 10px;
+        color: white;
+        padding: 15px;
+        text-align: center;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        height:fit-content;
+    }
+    #result p{
+        margin:0;
+
+    }
+</style>
+
+@if (Model != null)
+{
+<div id="result">
+    <h4>Charge Result</h4>
+    <br />
+
+    <p>The payment for order @Model.Id was done successfully! </p>
+    <p><i>@Model.User.Email</i></p>
+    <p>Total Paid: CHF @Model.TotalPrice</p>
+</div>
+}

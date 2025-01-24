@@ -1,0 +1,167 @@
+﻿@model Restaurant_Web_App.Models.ReviewModel
+
+@{
+    ViewBag.Title = "Reviews";
+}
+
+<style>
+    .star {
+        font-size: 1.5rem;
+        color: #d3d3d3; /* Default star color (unselected) */
+        cursor:pointer;
+    }
+
+        .star.selected {
+            color: gold; /* Selected star color */
+        }
+        #reviews{
+            display:grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+        .reviewBlock{
+            height:fit-content;
+            padding: 13px;
+            background-color:#f1f1f1;
+            border-radius: 10px;
+
+        }
+    .oldStar {
+        font-size: 1.5rem;
+        color: #d3d3d3; /* Default star color (unselected) */
+    }
+        .oldSelected{
+            color:gold;
+        }
+    @@media screen and (max-width: 768px) {
+        #reviews{
+            grid-template-columns: 1fr;
+        }
+        .start, .oldStar {
+            font-size: 1.2rem;
+        }
+    }
+</style>
+
+<h4>Reviews</h4>
+
+@if (Model.MyReview != null)
+{
+    <div class="reviewBlock">
+        <div style="display:flex;gap:15px;">
+            <div style="display:block;width:fit-content;">
+                <p style="margin: 0; display: block; width: fit-content;">My Review:</p>
+                <p style="font-size: 12px; display: block; width: fit-content;">@Model.MyReview.DatePosted</p>
+            </div>
+
+            <div id="stars" style="display: block; width: fit-content;height:fit-content;float:right;">
+                @for (int i = 0; i < Model.MyReview.Rating; i++)
+                {
+                    <span class="star selected">&#9733;</span>
+                }
+                @for (int i = 0; i < 5 - Model.MyReview.Rating; i++)
+                {
+                    <span class="star">&#9733;</span>
+                }
+            </div>
+        </div>
+        <p>@Model.MyReview.Comment</p>
+
+        @Html.ActionLink("Edit Review", "Edit", new { id = Model.MyReview.Id }, new { @class = "btn btn-light", @style = "margin-right:7px;" })
+
+        @Html.ActionLink("Delete Review", "Delete", new { id = Model.MyReview.Id }, new { @class = "btn btn-danger" })
+    </div>
+}
+else
+{
+
+
+
+
+
+    using (Html.BeginForm("Create", "Reviews"))
+    {
+        @Html.AntiForgeryToken();
+
+
+<div class="form-group">
+            <label for="Comment">Your Comment</label>
+            <textarea id="Comment" name="Comment" class="form-control" rows="4"></textarea>
+        </div><div class="form-group">
+    <div class="rating" id="starRating">
+        <!-- Star buttons with correct data-values -->
+        <span class="star" id="star1" data-value="1">&#9733;</span>
+        <span class="star" id="star2" data-value="2">&#9733;</span>
+        <span class="star" id="star3" data-value="3">&#9733;</span>
+        <span class="star" id="star4" data-value="4">&#9733;</span>
+        <span class="star" id="star5" data-value="5">&#9733;</span>
+    </div>
+    <input type="hidden" id="Rating" name="Rating" value="0" />
+
+</div>
+
+        if (User.Identity.IsAuthenticated)
+        {
+        <button type="submit" class="btn btn-success">Submit Review</button>
+        }
+        else
+        {
+            @Html.ActionLink("Login to Submit a Review", "Login", "Account", null, new { @class = "btn btn-secondary" });
+        }
+    }
+}
+<br />
+<div id="reviews">
+    @if (Model.Reviews.Count != 0)
+    {
+        foreach (Restaurant_Web_App.Models.Review Review in Model.Reviews)
+        {
+            <div class="reviewBlock">
+                <div style="display:flex; gap:15px;">
+                    <div>
+                        <p style="margin:0;">@Review.User.Name @Review.User.Surname</p>
+                        <p style="font-size: 12px;margin:0;">@Review.DatePosted</p>
+                    </div>
+                    <div id="stars">
+                        @for (int i = 0; i < Review.Rating; i++)
+                        {
+                            <span class="oldStar oldSelected">&#9733;</span>
+                        }
+                        @for (int i = 0; i < 5 - Review.Rating; i++)
+                        {
+                            <span class="oldStar">&#9733;</span>
+                        }
+                    </div>
+                </div>
+                <br />
+                <p style="position:relative;top:-15px;margin:0;">@Review.Comment</p>
+            </div>
+        }
+    }
+    else
+    {
+        <p>No reviews available</p>
+    }
+</div>
+
+
+@section Scripts {
+    <script>
+        // Handle star rating click events
+        document.querySelectorAll('.star').forEach(star => {
+            star.addEventListener('click', function () {
+                let rating = this.getAttribute('data-value');
+                document.getElementById('Rating').value = rating;
+
+                // Highlight stars from left to right based on the selection
+                document.querySelectorAll('.star').forEach(s => {
+                    if (s.getAttribute('data-value') <= rating) {
+                        s.classList.add('selected');
+                    } else {
+                        s.classList.remove('selected');
+                    }
+                });
+            });
+        });
+    </script>
+}

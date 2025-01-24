@@ -1,0 +1,180 @@
+﻿@model Restaurant_Web_App.Models.Cart
+
+@{
+    ViewBag.Title = "Order";
+}
+
+<style>
+    .grid-container {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr); /* 3 columns layout */
+        gap: 30px;
+        padding: 35px;
+        justify-items: center;
+        border-radius: 10px;
+        background-color: #f1f1f1ba;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.7);
+    }
+
+    .grid-item {
+        text-align: center;
+        background-color: white;
+        border: 1px solid rosybrown;
+        border-radius: 10px;
+        width: fit-content;
+        height: fit-content;
+        padding: 10px 10px;
+        word-wrap: break-word; /* Break long words and wrap text */
+        word-break: break-all; /* Break the text to avoid overflow (if needed) */
+        overflow-wrap: break-word;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.7);
+    }
+
+    .bottom {
+        background-color: #f1f1f1;
+        border: 1px solid rosybrown;
+        height: fit-content;
+        width: 200px;
+        margin: auto;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.7);
+        margin-top:14px;
+    }
+
+    .button a {
+        text-decoration: none;
+        color: saddlebrown;
+    }
+
+    .grid-item img {
+        width: 275px;
+        //height: 85%;
+        object-fit: cover;
+        margin: 5px 0;
+        border-radius: 10px;
+    }
+
+    b, i, li {
+        color: saddlebrown;
+    }
+
+    ul {
+        text-align: left;
+    }
+    /*
+    a {
+        text-decoration: none;
+    }
+
+        a:hover {
+            color: lightgray;
+        }*/
+
+
+    /* Responsive behavior for smaller screens */
+    @@media screen and (max-width: 768px) {
+        .grid-container {
+            grid-template-columns: 1fr; /* Stack sections vertically */
+        }
+    }
+    /*
+
+    .button a {
+        text-decoration: underline;
+        color: #0d6efd;
+    }
+
+        .button a:hover {
+            color: darkslateblue;
+        }*/
+
+    body {
+        background: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)), url('/UploadedDocuments/background2.jpg') center;
+    }
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
+
+<h4 style="color: black; background-color: #f1f1f1e0; border-radius: 10px; padding: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.7);">My Cart</h4>
+
+<div>
+    <dl class="dl-horizontal">
+        @if (Model.UserId == null)
+        {
+            <p style="color: black; background-color: #f1f1f1; border-radius: 10px; padding: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); width:fit-content;">Not Logged in</p>
+        }
+    </dl>
+
+    <br />
+    <div class="grid-container" style="justify-content:center;">
+        @{
+            foreach (Restaurant_Web_App.Models.FoodOrder FO in Model.FoodOrders)
+            {
+                <div class="grid-item">
+                    <b style="text-justify:">@FO.Food.Name</b>
+                    <b>@FO.SelectedSize (@FO.FoodPrice CHF)</b>
+                    <br />
+                    <img src="@Url.Content(FO.Food.ImageUrl)">
+                    <br />
+                    <ul>
+                        @foreach (Restaurant_Web_App.Models.Ingredient Ingredient in FO.SelectedIngredientsList)
+                        {
+                            <li>@Ingredient.Name (@Ingredient.Price CHF)</li>
+
+                        }
+                        @foreach (Restaurant_Web_App.Models.NoIngredient Ingredient in FO.SelectedNoIngredientsList)
+                        {
+                            <li>@Ingredient.Name (@Ingredient.Price CHF)</li>
+
+                        }
+                        @foreach (Restaurant_Web_App.Models.Option Ingredient in FO.SelectedOptionsList)
+                        {
+                            <li>@Ingredient.Name</li>
+                        }
+                    </ul>
+                    <br />
+                    <i>Quantity: @FO.Number</i><br />
+                    <i>Total: @FO.TotalPrice CHF</i>
+                    <div class="button">
+                        <i class="bi bi-trash" style="font-size: 21px;"></i>
+                        @Html.ActionLink("Remove", "RemoveOrder", new { id = FO.Id })
+                    </div>
+                </div>
+            }
+        }
+    </div>
+    @*
+        @using (Html.BeginForm("Index", "Payment"))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.Id)
+            <div style="text-align: center; border-radius: 10px;" class="bottom">
+
+            </div>
+        }
+    *@
+<div style="text-align: center; border-radius: 10px;padding:20px;" class="bottom">
+
+    @if (Model.FoodOrders.Count != 0)
+    {
+        <b>Total: @Model.TotalPrice CHF</b>
+
+        <form action="/Payment/CreateCharge" method="POST">
+            <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                    data-key="@ViewBag.PublishableKey"
+                    data-amount="@((int)(Model.TotalPrice * 100))"
+                    data-name="Online Payment"
+                    data-description="Subito Pizzakurier - Order @Model.Id"
+                    data-image="https://www.subitopizzakurier.ch/theme/SUBITO/img/icon.png"
+                    data-locale="auto"
+                    data-email="@Model.User.Email"
+                    data-currency="chf"></script>
+        </form>
+    }
+    else
+    {
+        <b>The Cart is Empty</b>
+    }
+
+</div>
+
+</div>
+

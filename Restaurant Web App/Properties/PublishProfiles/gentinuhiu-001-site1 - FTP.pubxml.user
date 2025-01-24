@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is used by the publish/package process of your Web project. You can customize the behavior of this process
+by editing this MSBuild file. In order to learn more about this please visit https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project>
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAoCnl4roG60qDihrfbWLg1QAAAAACAAAAAAAQZgAAAAEAACAAAADfMSjAxMTqi0RjZG8ToPCPevr/AdNU10NsF/Qi/xaiTwAAAAAOgAAAAAIAACAAAACMTv4/jmBJifYgqAtBjSTXQjwF3Itab6eYkkVy8UVudiAAAABSelXuEO7LEtLz2M0l/GRbXiqdZ5nEm48MA6NRcSEa+EAAAAA2h9OFk4WrZleTVmke8u1Gr/L48lW0eeuBDeIgq4J8M93q6CcJ9exR2tglxLcRe5WhwHtt8EdMLFAxmS20agbt</EncryptedPassword>
+    <_PublishTargetUrl>ftp://win6112.site4now.net:21/subito</_PublishTargetUrl>
+    <History>False|2024-10-24T21:11:46.8080328Z||;False|2024-10-24T23:11:09.1645845+02:00||;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+</Project>

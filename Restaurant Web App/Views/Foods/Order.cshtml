@@ -1,0 +1,178 @@
+﻿@model Restaurant_Web_App.Models.FoodOrderModel
+
+@{
+    ViewBag.Title = "Order";
+}
+
+<style>
+    .grid-container {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr); /* 3 columns layout */
+        gap: 30px;
+        padding: 35px;
+        justify-items: center;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.7);
+        border-radius:10px;
+        background-color:#f1f1f1ba;
+    }
+
+    .grid-item {
+        text-align: center;
+        background-color: white;
+        border: 2px solid rosybrown;
+        width: 230px;
+        height: fit-content;
+        padding: 10px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.7);
+    }
+
+    /* Responsive behavior for smaller screens */
+    @@media screen and (max-width: 768px) {
+        .grid-container {
+            grid-template-columns: 1fr; /* Stack sections vertically */
+        }
+    }
+
+    label, h4 {
+        color: saddlebrown;
+    }
+    body {
+        background: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)), url('/UploadedDocuments/background2.jpg') center;
+    }
+
+    .links a {
+        text-decoration: none;
+        padding: 6px;
+        background-color: red;
+        border-radius: 5px;
+        margin-block: 10px;
+    }
+
+    .links i {
+        color: white;
+        height: 35px;
+        width: 35px;
+        text-align: center;
+    }
+
+    .links > .icon {
+        margin-right: 5px; /* Spacing between icon and text */
+        color: white; /* Change icon color if needed */
+    }
+
+    .links {
+        margin: 5px; /* Margin around the links */
+        position: fixed;
+        right: 0;
+        top: 250px;
+    }
+</style>
+
+<h4 id="top" style="color: black; background-color: #f1f1f1e0; border-radius: 10px; padding: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.7); ">Ordering @Model.Food.Name</h4>
+<br />
+@using (Html.BeginForm("Order", "Foods"))
+{
+    @Html.AntiForgeryToken()
+
+<div class="grid-container">
+    <div class="grid-item">
+        <h4>Select Size <hr /></h4>
+        <label>
+            @Html.RadioButtonFor(m => m.SelectedSize, "Normal") Normal - @Model.Food.NormalSizedPrice FCH
+        </label>
+
+        @if (!Model.Food.disabledPrices)
+        {
+            <label>
+                @Html.RadioButtonFor(m => m.SelectedSize, "Small") Small - @Model.Food.SmallSizedPrice FCH
+            </label>
+            <label>
+                @Html.RadioButtonFor(m => m.SelectedSize, "Family") Family - @Model.Food.FamilySizedPrice FCH
+            </label>
+        }
+        <br />
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <button class="btn btn-outline-secondary" type="button" id="btn-minus" onclick="decrement()">-</button>
+            </div>
+            @Html.TextBoxFor(m => m.Number, new { @class = "form-control text-center", @id = "numberInput" })
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button" id="btn-plus" onclick="increment()">+</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="links">
+        <!-- Cart link -->
+        <a href="#top">
+            <i class="fas fa-arrow-up icon"></i>
+        </a>
+        <br />
+        <!-- Arrow link -->
+        <a href="#bottom">
+            <i class="fas fa-arrow-down icon"></i>
+        </a>
+    </div>
+
+    <div class="grid-item">
+        <h4>Select Ingredients <hr /></h4>
+        @foreach (var ingredient in Model.Food.Ingredients)
+        {
+            <label>
+                <input type="checkbox" name="SelectedIngredients" value="@ingredient.Id"
+                       @(Model.SelectedIngredients.Contains(ingredient.Id) ? "checked" : "") />
+                @ingredient.Name - @ingredient.Price FCH
+            </label>
+            <br />
+        }
+    </div>
+
+    <div class="grid-item">
+        <h4>Select No Ingredients <hr /></h4>
+        @foreach (var noIngredient in Model.Food.NoIngredients)
+        {
+            <label>
+                <input type="checkbox" name="SelectedNoIngredients" value="@noIngredient.Id"
+                       @(Model.SelectedNoIngredients.Contains(noIngredient.Id) ? "checked" : "") />
+                @noIngredient.Name - @noIngredient.Price FCH
+            </label>
+            <br />
+        }
+    </div>
+
+    <div class="grid-item">
+        <h4>Select Options <hr /></h4>
+        @foreach (var option in Model.Food.Options)
+        {
+            <label>
+                <input type="checkbox" name="SelectedOptions" value="@option.Id"
+                       @(Model.SelectedOptions.Contains(option.Id) ? "checked" : "") />
+                @option.Name
+            </label>
+            <br />
+        }
+    </div>
+    @{
+        Session["Location"] = Model.Food.FoodCategory.Id.ToString();
+    }
+    @Html.HiddenFor(m => m.FoodId)
+
+    <input type="submit" value="Order" id="bottom" class="btn btn-success" />
+</div>
+}
+<script>
+// JavaScript to handle increment and decrement
+    let numberInput = document.getElementById("numberInput");
+
+    function increment() {
+        let currentValue = parseInt(numberInput.value);
+        numberInput.value = currentValue + 1;
+    }
+
+    function decrement() {
+        let currentValue = parseInt(numberInput.value);
+        if (currentValue > 1) {
+            numberInput.value = currentValue - 1;
+        }
+    }</script>

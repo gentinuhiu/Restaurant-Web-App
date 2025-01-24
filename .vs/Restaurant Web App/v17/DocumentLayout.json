@@ -1,0 +1,88 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\genti\\Desktop\\Programs\\Restaurant Web App\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{19A20A92-C1BE-4AD3-934A-0E2B644276EB}|Restaurant Web App\\Restaurant Web App.csproj|C:\\Users\\genti\\Desktop\\Programs\\Restaurant Web App\\restaurant web app\\web.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{19A20A92-C1BE-4AD3-934A-0E2B644276EB}|Restaurant Web App\\Restaurant Web App.csproj|solutionrelative:restaurant web app\\web.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19A20A92-C1BE-4AD3-934A-0E2B644276EB}|Restaurant Web App\\Restaurant Web App.csproj|c:\\users\\genti\\desktop\\programs\\restaurant web app\\restaurant web app\\views\\account\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{19A20A92-C1BE-4AD3-934A-0E2B644276EB}|Restaurant Web App\\Restaurant Web App.csproj|solutionrelative:restaurant web app\\views\\account\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19A20A92-C1BE-4AD3-934A-0E2B644276EB}|Restaurant Web App\\Restaurant Web App.csproj|C:\\Users\\genti\\Desktop\\Programs\\Restaurant Web App\\restaurant web app\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{19A20A92-C1BE-4AD3-934A-0E2B644276EB}|Restaurant Web App\\Restaurant Web App.csproj|solutionrelative:restaurant web app\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19A20A92-C1BE-4AD3-934A-0E2B644276EB}|Restaurant Web App\\Restaurant Web App.csproj|C:\\Users\\genti\\Desktop\\Programs\\Restaurant Web App\\restaurant web app\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{19A20A92-C1BE-4AD3-934A-0E2B644276EB}|Restaurant Web App\\Restaurant Web App.csproj|solutionrelative:restaurant web app\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Login.cshtml",
+              "DocumentMoniker": "C:\\Users\\genti\\Desktop\\Programs\\Restaurant Web App\\Restaurant Web App\\Views\\Account\\Login.cshtml",
+              "RelativeDocumentMoniker": "Restaurant Web App\\Views\\Account\\Login.cshtml",
+              "ToolTip": "C:\\Users\\genti\\Desktop\\Programs\\Restaurant Web App\\Restaurant Web App\\Views\\Account\\Login.cshtml",
+              "RelativeToolTip": "Restaurant Web App\\Views\\Account\\Login.cshtml",
+              "ViewState": "AQIAADAAAAAAAAAAAAAAADgAAAAzAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-28T17:55:05.943Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\genti\\Desktop\\Programs\\Restaurant Web App\\Restaurant Web App\\Views\\Home\\Index.cshtml",
+              "RelativeDocumentMoniker": "Restaurant Web App\\Views\\Home\\Index.cshtml",
+              "ToolTip": "C:\\Users\\genti\\Desktop\\Programs\\Restaurant Web App\\Restaurant Web App\\Views\\Home\\Index.cshtml",
+              "RelativeToolTip": "Restaurant Web App\\Views\\Home\\Index.cshtml",
+              "ViewState": "AQIAAOQBAAAAAAAAAAAewAQCAABzAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-28T17:53:55.393Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Web.config",
+              "DocumentMoniker": "C:\\Users\\genti\\Desktop\\Programs\\Restaurant Web App\\Restaurant Web App\\Web.config",
+              "RelativeDocumentMoniker": "Restaurant Web App\\Web.config",
+              "ToolTip": "C:\\Users\\genti\\Desktop\\Programs\\Restaurant Web App\\Restaurant Web App\\Web.config",
+              "RelativeToolTip": "Restaurant Web App\\Web.config",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABIAAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000601|",
+              "WhenOpened": "2024-10-21T17:40:53.891Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "_Layout.cshtml",
+              "DocumentMoniker": "C:\\Users\\genti\\Desktop\\Programs\\Restaurant Web App\\Restaurant Web App\\Views\\Shared\\_Layout.cshtml",
+              "RelativeDocumentMoniker": "Restaurant Web App\\Views\\Shared\\_Layout.cshtml",
+              "ToolTip": "C:\\Users\\genti\\Desktop\\Programs\\Restaurant Web App\\Restaurant Web App\\Views\\Shared\\_Layout.cshtml",
+              "RelativeToolTip": "Restaurant Web App\\Views\\Shared\\_Layout.cshtml",
+              "ViewState": "AQIAADMAAAAAAAAAAAAAAI0AAAAQAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-17T19:43:37.881Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+﻿@{
+    ViewBag.Title = "Payment";
+}
+
+<h2>Payment Page</h2>
+
+<form action="/Payment/CreateCharge" method="POST">
+    <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+            data-key="@ViewBag.PublishableKey"
+            data-amount="5000"
+            data-name="Sample Charge"
+            data-description="Sample Charge"
+            data-image="https://yourdomain.com/path/to/logo.png"
+            data-locale="auto">
+    </script>
+</form>

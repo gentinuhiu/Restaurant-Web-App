@@ -1,0 +1,211 @@
+﻿@using Newtonsoft.Json
+
+@model Restaurant_Web_App.Models.FoodCategoryModel2
+
+@{
+    ViewBag.Title = "Category";
+}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
+
+<style>
+    .grid-container {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr); /* 3 columns layout */
+        gap: 30px;
+        padding: 35px;
+        justify-items: center;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.7);
+        border-radius: 10px;
+        background-color: #f1f1f1ba;
+    }
+
+    .grid-item {
+        text-align: center;
+        background-color: #8cce46cc;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.7);
+        //width: fit-content;
+        width: 280px;
+        height: fit-content;
+        padding: 10px 3px;
+        word-wrap: break-word; /* Break long words and wrap text */
+        word-break: break-all; /* Break the text to avoid overflow (if needed) */
+        overflow-wrap: break-word;
+        border-radius: 10px;
+    }
+
+        .grid-item img {
+            width: 275px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+    a, p, b, i, h4 {
+        color: ghostwhite;
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+        a:hover {
+            color: lightgray;
+        }
+
+
+    /* Responsive behavior for smaller screens */
+    @@media screen and (max-width: 768px) {
+        .grid-container {
+            grid-template-columns: 1fr; /* Stack sections vertically */
+        }
+    }
+
+    body {
+        background: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)), url('/UploadedDocuments/background2.jpg') center;
+    }
+
+    .links a {
+        text-decoration: none;
+        padding: 6px;
+        background-color: red;
+        border-radius: 5px;
+        margin-block: 10px;
+    }
+
+    .links i {
+        color: white;
+        height: 35px;
+        width: 35px;
+        text-align: center;
+    }
+
+    .links > .icon {
+        margin-right: 5px; /* Spacing between icon and text */
+        color: white; /* Change icon color if needed */
+    }
+
+    .links {
+        margin: 5px; /* Margin around the links */
+        position: fixed;
+        right: 0;
+        top: 250px;
+    }
+</style>
+
+<h4 style="color: black; background-color: #f1f1f1e0; border-radius: 10px; padding: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.7); ">@Model.Name Category</h4>
+<br />
+
+@if (User.Identity.IsAuthenticated && User.IsInRole("Administrator"))
+{
+    <p class="button">
+        @Html.ActionLink("Add New Food", "Create", "Foods", new { id = Model.Id }, new { @class = "btn btn-primary" })
+    </p>
+}
+@if (User.Identity.IsAuthenticated)
+{
+    <div class="links">
+        <!-- Cart link -->
+        <a href="/Carts/ClientIndex">
+            <i class="fas fa-shopping-cart icon"></i>
+        </a>
+    </div>
+}
+    <div class="grid-container">
+        @foreach (var item in Model.Foods)
+        {
+            <div class="grid-item">
+                <h4>@item.Name</h4>
+                <img src="@Url.Content(item.ImageUrl)">
+                <p><i>@item.Description</i></p>
+                <p><b>Normal sized: @item.NormalSizedPrice CHF</b></p>
+
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <div>
+                        <a id="orderLink" href="@Url.Action("Order", "Foods", new { id = item.Id })">
+                            <i class="bi bi-cart-plus" style="font-size: 21px;"></i> Add to Cart
+                        </a>
+                    </div>
+                }
+                else
+                {
+                    <div>
+                        <a id="orderLink" href="@Url.Action("Login", "Account")">
+                            <i class="bi bi-cart-plus" style="font-size: 21px;"></i> Add to Cart
+                        </a>
+                    </div>
+                }
+                @if (User.Identity.IsAuthenticated && User.IsInRole("Administrator"))
+                {
+                    <div>
+                        @Html.ActionLink("Edit Info", "Edit", "Foods", new { id = item.Id }, null) <br />
+                        @Html.ActionLink("Edit Ingredients", "EditIngredients", "Foods", new { id = item.Id }, null) <br />
+                        @Html.ActionLink("Edit No Ingredients", "EditNoIngredients", "Foods", new { id = item.Id }, null) <br />
+                        @Html.ActionLink("Edit Options", "EditOptions", "Foods", new { id = item.Id }, null) <br />
+                        @Html.ActionLink("Delete", "Delete", "Foods", new { id = item.Id }, null)
+                    </div>
+                }
+            </div>
+        }
+    </div>
+
+    <script>
+
+    document.getElementById("orderLink").addEventListener("click", function (event) {
+
+
+            const today = new Date().getDay(); // Get the current day (0 = Sunday, 1 = Monday, etc.)
+    const daysArray = @Html.Raw(JsonConvert.SerializeObject(Model.Days));
+    const currentDay = daysArray[today];
+
+    var startTimeHours = currentDay.StartTime[0] + currentDay.StartTime[1];
+    const startTimeMinutes = currentDay.StartTime[3] + currentDay.StartTime[4];
+
+    var endTimeHours = currentDay.EndTime[0] + currentDay.EndTime[1];
+    const endTimeMinutes = currentDay.EndTime[3] + currentDay.EndTime[4];
+
+    if (parseInt(endTimeHours) == 0) {
+        endTimeHours = "24";
+    }
+
+    const startTimeCount = (parseInt(startTimeHours) * 60) + parseInt(startTimeMinutes);
+    const endTimeCount = (parseInt(endTimeHours) * 60) + parseInt(endTimeMinutes);
+
+
+    const currentDate = new Date();
+    const currentHour = currentDate.getHours();
+    const currentMinutes = currentDate.getMinutes();
+    const currentCount = (currentHour * 60) + currentMinutes;
+
+    var startTimeHours2 = currentDay.StartTime2[0] + currentDay.StartTime2[1];
+    const startTimeMinutes2 = currentDay.StartTime2[3] + currentDay.StartTime2[4];
+
+    var endTimeHours2 = currentDay.EndTime2[0] + currentDay.EndTime2[1];
+    const endTimeMinutes2 = currentDay.EndTime2[3] + currentDay.EndTime2[4];
+
+    if (parseInt(endTimeHours2) == 0) {
+        endTimeHours2 = "24";
+    }
+
+    const startTimeCount2 = (parseInt(startTimeHours2) * 60) + parseInt(startTimeMinutes2);
+    const endTimeCount2 = (parseInt(endTimeHours2) * 60) + parseInt(endTimeMinutes2);
+
+    var line = document.getElementsByClassName("line")[0];
+    var emailButton = document.getElementById("emailButton");
+    var callButton = document.getElementById("callButton");
+
+    if (!(currentCount >= startTimeCount && currentCount <= endTimeCount) && !(currentCount >= startTimeCount2 && currentCount <= endTimeCount2)) {
+        event.preventDefault();
+
+        alert("We are closed now\nCheck the schedule"); // This shows an alert when the link is clicked
+
+        window.location.href = '@Url.Action("Index", "Home")';
+    }
+    });
+
+
+
+    </script>
+
+
+
+

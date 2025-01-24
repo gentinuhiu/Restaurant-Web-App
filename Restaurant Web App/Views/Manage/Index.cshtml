@@ -1,0 +1,85 @@
+﻿@model Restaurant_Web_App.Models.IndexViewModel
+@{
+    ViewBag.Title = "Account";
+}
+<style>
+    .grid-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr); /* 2 columns layout */
+        gap: 30px;
+    }
+
+    .grid-item {
+        word-wrap: break-word; /* Break long words and wrap text */
+        word-break: break-all; /* Break the text to avoid overflow (if needed) */
+        overflow-wrap: break-word;
+    }
+    .settings-item > div {
+        background-color: #f9f9f9;
+        border-radius: 10px;
+    }
+    .settings {
+        width: 100%;
+    }
+</style>
+
+<main aria-labelledby="title">
+    <p class="text-success">@ViewBag.StatusMessage</p>
+    <div>
+        <h4>Change your account settings</h4>
+        <hr />
+        <div class="settings">
+            <div class="settings-item">
+                <div style="padding: 20px 30px; width: fit-content; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); ">
+                    <div class="grid-container">
+                        <div class="grid-item">
+                            <dt>Name</dt>
+                            <dd>
+                                @Html.TextBoxFor(model => model.User.Name, new { @class = "form-control", disabled = "disabled" })
+                            </dd>
+
+                            <dt>Surname</dt>
+                            <dd>
+                                @Html.TextBoxFor(model => model.User.Surname, new { @class = "form-control", disabled = "disabled" })
+                            </dd>
+
+                            <dt>Address</dt>
+                            <dd>
+                                @Html.TextBoxFor(model => model.User.Address, new { @class = "form-control", disabled = "disabled" })
+                            </dd>
+                        </div>
+
+                        <div class="grid-item">
+                            <dt>City</dt>
+                            <dd>
+                                @Html.TextBoxFor(model => model.User.City, new { @class = "form-control", disabled = "disabled" })
+                            </dd>
+
+                            <dt>Phone Number</dt>
+                            <dd>
+                                @Html.TextBoxFor(model => model.User.PhoneNumber, new { @class = "form-control", disabled = "disabled" })
+                            </dd>
+
+                            <dt>Email</dt>
+                            <dd>
+                                @Html.TextBoxFor(model => model.User.Email, new { @class = "form-control", disabled = "disabled" })
+                            </dd>
+                        </div>
+                    </div>
+                </div>
+
+                <br />
+                @Html.ActionLink("Edit Information", "EditInformation", null, new { @class = "btn btn-primary" }) &nbsp;
+
+                @if (Model.HasPassword)
+                {
+                    @Html.ActionLink("Change password", "ChangePassword", null, new { @class = "btn btn-primary" })
+                }
+                else
+                {
+                    @Html.ActionLink("Create a password", "SetPassword", null, new { @class = "btn btn-primary" })
+                }
+            </div>
+        </div>
+    </div>
+</main>

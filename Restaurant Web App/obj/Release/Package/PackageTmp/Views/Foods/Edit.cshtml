@@ -1,0 +1,86 @@
+﻿@model Restaurant_Web_App.Models.FoodModel
+
+@{
+    ViewBag.Title = "Food";
+}
+
+<h4>Edit @Model.Name</h4>
+
+
+@using (Html.BeginForm("Edit", "Foods", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.NormalSizedPrice, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.NormalSizedPrice, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.NormalSizedPrice, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @if (!Model.disabledPrices)
+        {
+        <div class="form-group">
+            @Html.LabelFor(model => model.SmallSizedPrice, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.SmallSizedPrice, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.SmallSizedPrice, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.FamilySizedPrice, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.FamilySizedPrice, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.FamilySizedPrice, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        }
+        <br />
+        <img src="@Url.Content(Model.imageUrl)" style="width:120px" />
+        <br />
+
+        <div class="form-group">
+            <label for="Name" class="control-label col-md-2">Image File</label>
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.imageFile, new { type = "file", @class = "form-control" })
+            </div>
+        </div>
+        <br />
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-primary" /> &nbsp;
+                @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-secondary"})
+
+            </div>
+        </div>
+    </div>
+}
+
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

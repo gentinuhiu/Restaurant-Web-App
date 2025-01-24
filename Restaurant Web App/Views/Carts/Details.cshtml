@@ -1,0 +1,53 @@
+﻿@model Restaurant_Web_App.Models.Cart
+
+@{
+    ViewBag.Title = "Order";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Cart</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.UserId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserId)
+        </dd>
+
+    </dl>
+</div>
+<p>User: @Model.User.Email</p>
+<hr />
+<p>Pizza Orders</p>
+@{
+    foreach (Restaurant_Web_App.Models.PizzaOrder item in Model.PizzaOrders)
+    {
+        <p>@item.Pizza.Name (@item.SelectedSize)</p>
+        <hr />
+        <p>Ingredients</p>
+        foreach (Restaurant_Web_App.Models.Ingredient ing in item.SelectedIngredientsStr)
+        {
+            <p>@ing.Name</p>
+        }
+        <hr />
+        <p>No Ingredients</p>
+        foreach (Restaurant_Web_App.Models.NoIngredient ing in item.SelectedNoIngredientsStr)
+        {
+            <p>@ing.Name</p>
+        }
+        <hr />
+        <p>Options</p>
+        foreach (Restaurant_Web_App.Models.Option ing in item.SelectedOptionsStr)
+        {
+            <p>@ing.Name</p>
+        }
+    }
+}
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
